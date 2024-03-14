@@ -1,11 +1,54 @@
-version: '3'
-
+version: "3.7"
 services:
-  laravel:
+  app:
     build:
-      context: .
+      context: ./
       dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
+    image: datagarden-crawler-img
+    env_file: 
+      - ./.env
+    container_name: datagarden-crawler-app
+    restart: unless-stopped
+    working_dir: /var/www/
     volumes:
-      - .:/var/www/html
+      - ./:/var/www
+    networks:
+      - datagarden-crawler-network
+  db:
+    image: mysql:8.0
+    container_name: datagarden-crawler-db
+    env_file: 
+      - ./.env
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_ALLOW_EMPTY_PASSWORD: ${DB_ALLOW_EMPTY_PASSWORD}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    healthcheck:
+        test: ["CMD", "mysqladmin" ,"ping", "-h", "${DB_DATABASE}"]
+        timeout: 10s
+        retries: 10
+    volumes:
+      - ./docker-compose/mysql:/docker-entrypoint-initdb.d
+    networks:
+      - datagarden-crawler-network
+  nginx:
+    image: nginx:alpine
+    env_file: 
+      - ./.env
+    container_name: datagarden-crawler-nginx
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d/
+    networks:
+      - datagarden-crawler-network
+networks:
+  datagarden-crawler-network:
+    driver: bridge

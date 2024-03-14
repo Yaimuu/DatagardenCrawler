@@ -24,14 +24,14 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Copy Laravel files
 COPY . .
 
-RUN chmod -R +x datagarden-crawler
+RUN chmod -R 755 ./datagarden-crawler
 # Run Composer install
 WORKDIR /var/www/html/datagarden-crawler
 
 # Install Laravel dependencies
 RUN composer install
-RUN ls ./vendor
-RUN composer update
+RUN composer update --lock
+RUN composer dump-autoload --no-scripts
 
 # Expose port 80
 EXPOSE 8080
