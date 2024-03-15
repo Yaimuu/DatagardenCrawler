@@ -1,8 +1,8 @@
 # Use the latest PHP image from Docker Hub
-FROM php:7.4
+FROM php:7.4-fpm
 
 # Set working directory
-WORKDIR /var/www/html
+WORKDIR /var/www
 
 # Install system dependencies
 RUN apt-get update && \
@@ -26,31 +26,12 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Copy Laravel files
 COPY . .
 
-WORKDIR /var/www/html/datagarden-crawler
+WORKDIR /var/www/datagarden-crawler
 
 RUN chmod -R 755 .
 
-# Install Laravel dependencies
-RUN composer install --no-scripts --no-autoloader && \
-    composer update --lock && \
-    composer dump-autoload --no-scripts
-
-RUN composer clear-cache && \
-    rm -rf /root/.composer/cache/*
-
-RUN echo user=root >>  /etc/supervisor/supervisord.conf
-
-# Expose port 8080
+# Expose port
 EXPOSE 80 8080
 
-# Generate security key
-RUN php artisan key:generate
-# Optimizing Configuration loading
-RUN php artisan config:cache
-# Optimizing Route loading
-RUN php artisan route:cache
-# Optimizing View loading
-RUN php artisan view:cache
-
 # Run Laravel server
-CMD bash -c "composer install --working-dir=./datagarden-crawler/ && php ./datagarden-crawler/artisan serve --host 0.0.0.0 --port 8080"
+CMD bash -c "chmod +x start.sh & ./start.sh"
