@@ -1,5 +1,5 @@
 # Use the latest PHP image from Docker Hub
-FROM php:latest
+FROM php:7.4
 
 # Set working directory
 WORKDIR /var/www/html
@@ -14,9 +14,11 @@ RUN apt-get update && \
     zip \
     unzip \
     git \
+    supervisor \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd pdo pdo_mysql
+    && docker-php-ext-install gd pdo pdo_mysql \
+    && mkdir -p /var/log/supervisor 
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -24,17 +26,31 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Copy Laravel files
 COPY . .
 
-RUN chmod -R 755 ./datagarden-crawler
-# Run Composer install
 WORKDIR /var/www/html/datagarden-crawler
 
-# Install Laravel dependencies
-RUN composer install
-RUN composer update --lock
-RUN composer dump-autoload --no-scripts
+RUN chmod -R 755 .
 
-# Expose port 80
+# Install Laravel dependencies
+RUN composer install --no-scripts --no-autoloader && \
+    composer update --lock && \
+    composer dump-autoload --no-scripts
+
+RUN composer clear-cache && \
+    rm -rf /root/.composer/cache/*
+
+RUN echo user=root >>  /etc/supervisor/supervisord.conf
+
+# Expose port 8080
 EXPOSE 8080
 
+# Generate security key
+RUN php artisan key:generate
+# Optimizing Configuration loading
+RUN php artisan config:cache
+# Optimizing Route loading
+RUN php artisan route:cache
+# Optimizing View loading
+RUN php artisan view:cache
+
 # Run Laravel server
-CMD php artisan serve --host=0.0.0.0 --port=8080
+CMD bash -c "composer install --working-dir=./datagarden-crawler/ && php ./datagarden-crawler/artisan serve --host 0.0.0.0 --port 8080"

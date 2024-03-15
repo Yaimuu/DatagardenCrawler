@@ -9,9 +9,9 @@ services:
       - ./.env
     container_name: datagarden-crawler-app
     restart: unless-stopped
-    working_dir: /var/www/
+    working_dir: /var/www/html
     volumes:
-      - ./:/var/www
+      - ./:/var/www/html
     networks:
       - datagarden-crawler-network
   db:
@@ -43,9 +43,9 @@ services:
     container_name: datagarden-crawler-nginx
     restart: unless-stopped
     ports:
-      - 8080:8080
+      - 8080:80
     volumes:
-      - ./:/var/www
+      - ./:/var/www/html
       - ./docker-compose/nginx:/etc/nginx/conf.d/
     networks:
       - datagarden-crawler-network
