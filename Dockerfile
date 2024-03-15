@@ -41,7 +41,7 @@ RUN composer clear-cache && \
 RUN echo user=root >>  /etc/supervisor/supervisord.conf
 
 # Expose port 8080
-EXPOSE 8080
+EXPOSE 80 8080
 
 # Generate security key
 RUN php artisan key:generate

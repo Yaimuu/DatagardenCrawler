@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile
     image: datagarden-crawler-img
     env_file: 
-      - ./.env
+      - ./datagarden-crawler/.env
     container_name: datagarden-crawler-app
     restart: unless-stopped
     working_dir: /var/www/html
@@ -18,7 +18,7 @@ services:
     image: mysql:8.0
     container_name: datagarden-crawler-db
     env_file: 
-      - ./.env
+      - ./datagarden-crawler/.env
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: ${DB_DATABASE}
@@ -39,7 +39,7 @@ services:
   nginx:
     image: nginx:alpine
     env_file: 
-      - ./.env
+      - ./datagarden-crawler/.env
     container_name: datagarden-crawler-nginx
     restart: unless-stopped
     ports:
