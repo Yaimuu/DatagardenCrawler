@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "20297a08dd29e4b8606538969a69b4d3",
+    "content-hash": "c6f69eccffb1d76c3609ed5f9562035f",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -190,6 +190,49 @@
                 }
             ],
             "time": "2023-12-11T17:09:12+00:00"
+        },
+        {
+            "name": "cybercite/datagarden-php-api-client-light",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/CyberciteDev/datagarden-api-client-light.git",
+                "reference": "9e21cc8e74673b775e13093930c9a42210292d3d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/CyberciteDev/datagarden-api-client-light/zipball/9e21cc8e74673b775e13093930c9a42210292d3d",
+                "reference": "9e21cc8e74673b775e13093930c9a42210292d3d",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^7.0",
+                "php": ">=7.3"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "CyberCite\\DataGardenApiClient\\": "src/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "MOLINA Laurent",
+                    "email": "lmolina@cybercite.fr",
+                    "role": "Unicorn Developer"
+                }
+            ],
+            "description": "Un client simple en php pour l'api de datagarden",
+            "homepage": "https://github.com/CyberciteDev/datagarden-api-client-light",
+            "support": {
+                "source": "https://github.com/CyberciteDev/datagarden-api-client-light/tree/main",
+                "issues": "https://github.com/CyberciteDev/datagarden-api-client-light/issues"
+            },
+            "time": "2023-09-27T09:42:32+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
