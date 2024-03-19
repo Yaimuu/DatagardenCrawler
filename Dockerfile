@@ -4,6 +4,12 @@ FROM php:7.4-fpm
 # Set working directory
 WORKDIR /var/www
 
+RUN apt-get update && apt-get install -y gnupg2
+# Add apt repo ppa:ondrej/php
+RUN echo "deb https://ppa.launchpadcontent.net/ondrej/php/ubuntu focal main" | tee -a /etc/apt/sources.list
+RUN echo "#deb-src https://ppa.launchpadcontent.net/ondrej/php/ubuntu focal main" | tee -a /etc/apt/sources.list
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4f4ea0aae5267a6c 
+
 # Install system dependencies
 RUN apt-get update && \
     apt-get install -y \
@@ -14,11 +20,9 @@ RUN apt-get update && \
     zip \
     unzip \
     git \
-    supervisor \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd pdo pdo_mysql \
-    && mkdir -p /var/log/supervisor 
+    && docker-php-ext-install gd pdo pdo_mysql
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -32,6 +36,8 @@ RUN chmod -R 755 .
 
 # Expose port
 EXPOSE 80 8080
+
+# RUN composer require cybercite/datagarden-php-api-client-light
 
 # Run Laravel server
 CMD bash -c "chmod +x start.sh & ./start.sh"

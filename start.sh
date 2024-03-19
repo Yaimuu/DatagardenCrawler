@@ -1,5 +1,6 @@
 #!/bin/bash
 
+composer require cybercite/datagarden-php-api-client-light --working-dir=./datagarden-crawler/
 composer install --no-scripts --no-autoloader --working-dir=./datagarden-crawler/
 composer update --lock --working-dir=./datagarden-crawler/
 composer dump-autoload --no-scripts --working-dir=./datagarden-crawler/
