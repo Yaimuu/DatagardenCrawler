@@ -7864,7 +7864,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "cybercite/datagarden-php-api-client-light": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\CrawlController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,4 +16,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name("home");
+
+Route::get('/reports', function () {
+    return view('reports');
+})->name("reports");
+
+Route::post('/start-crawl', [CrawlController::class, 'startCrawl']);
