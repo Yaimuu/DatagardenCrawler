@@ -1,7 +1,9 @@
 #!/bin/bash
-
+echo "composer install"
 composer install --no-scripts --no-autoloader --working-dir=./datagarden-crawler/
+echo "composer update"
 composer update --lock --working-dir=./datagarden-crawler/
+echo "composer dump-autoload"
 composer dump-autoload --no-scripts --working-dir=./datagarden-crawler/
 
 php ./datagarden-crawler/artisan key:generate
