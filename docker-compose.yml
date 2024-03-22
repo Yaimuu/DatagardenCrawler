@@ -12,6 +12,8 @@ services:
     working_dir: /var/www
     volumes:
       - ./:/var/www
+    ports:
+      - 8080:80
     networks:
       - datagarden-crawler-network
   db:
@@ -34,19 +36,6 @@ services:
         retries: 10
     volumes:
       - ./docker-compose/mysql:/docker-entrypoint-initdb.d
-    networks:
-      - datagarden-crawler-network
-  nginx:
-    image: nginx:alpine
-    env_file: 
-      - ./datagarden-crawler/.env
-    container_name: datagarden-crawler-nginx
-    restart: unless-stopped
-    ports:
-      - 8080:80
-    volumes:
-      - ./:/var/www
-      - ./docker-compose/nginx:/etc/nginx/conf.d/
     networks:
       - datagarden-crawler-network
 networks:

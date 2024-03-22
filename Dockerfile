@@ -1,5 +1,5 @@
 # Use the latest PHP image from Docker Hub
-FROM php:7.4-fpm
+FROM php:7.4-apache
 
 # Set working directory
 WORKDIR /var/www
@@ -26,6 +26,18 @@ RUN apt-get update && \
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Config apache
+RUN echo "ServerName laravel-app.local" >> /etc/apache2/apache2.conf
+
+ENV APACHE_DOCUMENT_ROOT=/var/www/datagarden-crawler/public
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+
+RUN a2enmod rewrite headers
+
+# Start with base PHP config, then add extensions.
+RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 # Copy Laravel files
 COPY . .
